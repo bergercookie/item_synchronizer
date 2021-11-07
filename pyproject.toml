@@ -1,0 +1,49 @@
+[tool.poetry]
+name = "item_synchronizer"
+version = "0.1.0"
+description = "Synchronize items between two different sources"
+authors = ["Nikos Koukis <nickkouk@gmail.com>", ]
+license = "MIT"
+readme = "README.md"
+
+homepage = "TODO"
+repository = "https://github.com/bergercookie/item_synchronizer"
+classifiers = [ "Programming Language :: Python :: 3.6",
+                "Programming Language :: Python :: 3.7",
+                "Programming Language :: Python :: 3.8",
+                "License :: Other/Proprietary License",
+                "Operating System :: Unix",
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+loguru = "^0.5.3"
+bidict = "^0.21.4"
+
+[tool.poetry.dev-dependencies]
+black = { version = "*", allow-prereleases = true }
+isort = "*"
+mock = "*"
+pytest = "*"
+pdbpp = "^0.10.3"
+
+[tool.isort]
+line_length = 95
+include_trailing_comma = true
+multi_line_output = 3
+
+[tool.black]
+experimental-string-processing = true
+line-length = 95
+target-version = ['py36', 'py37', 'py38']
+include = '\.pyi?$'
+
+[tool.pylint]
+[tool.pylint.'MESSAGES CONTROL']
+max-line-length = 95
+ignore-invalid-name = true
+
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
