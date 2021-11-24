@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "item_synchronizer"
-version = "0.1.0"
+version = "1.0.0"
 description = "Synchronize items between two different sources"
 authors = ["Nikos Koukis <nickkouk@gmail.com>", ]
 license = "MIT"
 readme = "README.md"
 
-homepage = "TODO"
+homepage = "https://github.com/bergercookie/item_synchronizer"
 repository = "https://github.com/bergercookie/item_synchronizer"
 classifiers = [ "Programming Language :: Python :: 3.6",
                 "Programming Language :: Python :: 3.7",
