@@ -18,12 +18,11 @@ UpdaterFn = Callable[[ID, Item], None]
 DeleterFn = Callable[[ID], None]
 # Conversion Function - convert an item from the format of one source to the format of another.
 ConverterFn = Callable[[Item], Item]
-# ComparatorFn = Callable[[Item, Item], bool]
 
 # Date Getter Function - Given an item should return the corresponding date of it.
 DateGetterFn = Callable[[Item], datetime]
 
-# ItemGetter Function - Given the ID of an Item return the Item
-# ItemGetter functions should raise "KeyError" in case the item is not present (e.g. was
-# previously deleted)
+# ItemGetter Function - Given the ID of an Item of one source return the corresponding item on
+# the other source. ItemGetter functions should raise "KeyError" in case the item is not
+# present (e.g. was previously deleted)
 ItemGetterFn = Callable[[ID], Item]
