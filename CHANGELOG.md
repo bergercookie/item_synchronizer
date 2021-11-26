@@ -10,10 +10,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 Added proper documentation to the project
 
-
 ## 1.0.0 (2021-11-24)
 
-* First working and tested version released
+- First working and tested version released
 
 <!-- ### Added -->
 <!-- ### Changed -->
@@ -24,6 +23,5 @@ Added proper documentation to the project
 
 ## 0.1.0 (2021-11-07)
 
-* Bootstrap project via
-    [python_bootstrap](https://github.com/bergercookie/python_package_cookiecutter)
-
+- Bootstrap project via
+  [python_bootstrap](https://github.com/bergercookie/python_package_cookiecutter)
