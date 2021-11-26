@@ -1,4 +1,4 @@
-# Items Synchronizer
+# Item Synchronizer
 
 <img src="res/logo.png" alt="logo" style="zoom:50%;" />
 
@@ -72,7 +72,7 @@ calendar entry.
 
 Thus, you have the following and you want to sync the `A` and `B` items.
 
-![sync0](res/drawio/sync0.drawio.png)
+![sync0](res/drawio/sync0.drawio.svg)
 
 As described in the previous section, `item_synchronizer` requires a set of
 functions which it will call when it needs to insert, update or delete an item
@@ -87,13 +87,13 @@ and starts again.)
 Thus, this is the situation that `item_synchronizer` expects at its first
 run.
 
-![sync1](res/drawio/sync1.drawio.png)
+![sync1](res/drawio/sync1.drawio.svg)
 
 After the first call to `sync()` here's the expected results. After this call
 each event of one side will have a counterpart on the other side and that's also
 going to be reflected in the provided `A_to_B` bidict.
 
-![sync2](res/drawio/sync2.drawio.png)
+![sync2](res/drawio/sync2.drawio.svg)
 
 Subsequent calls to `sync()` will pick up the changes and will insert any new
 items from each side to the other side accordingly.
@@ -101,18 +101,18 @@ items from each side to the other side accordingly.
 Now let's say that item 2 was modified from side A, item 3 from side B and
 item 21 was deleted from side A.
 
-![update-n-delete0](res/drawio/update-n-delete0.drawio.png)
+![update-n-delete0](res/drawio/update-n-delete0.drawio.svg)
 
 In the subsequent call to `sync()`, `item_synchronizer` will forward these
 changes to the other side appropriately.
 
-![update-n-delete1](res/drawio/update-n-delete1.drawio.png)
+![update-n-delete1](res/drawio/update-n-delete1.drawio.svg)
 
 If there was a conflict, e.g., an item removed from one side and updated from
 the other, then `item_synchronizer` supports a series of resolution strategies
 for handling such conflicts.
 
-![resolution-strategy](res/drawio/resolution-strategy.drawio.png)
+![resolution-strategy](res/drawio/resolution-strategy.drawio.svg)
 
 ## Installation
 
