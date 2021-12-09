@@ -76,3 +76,16 @@ def test_always_second_rs():
         resolution = rs.resolve(sample_items[i], sample_items[i - 1])
         assert resolution.item == sample_items[i - 1]
         assert resolution.result_id == ResolutionResult.ID.B
+
+
+def test_names():
+    assert AlwaysFirstRS().name == "AlwaysFirstRS"
+    assert AlwaysSecondRS().name == "AlwaysSecondRS"
+    assert (
+        MostRecentRS(date_getter_A=item_getter, date_getter_B=item_getter).name
+        == "MostRecentRS"
+    )
+    assert (
+        LeastRecentRS(date_getter_A=item_getter, date_getter_B=item_getter).name
+        == "LeastRecentRS"
+    )

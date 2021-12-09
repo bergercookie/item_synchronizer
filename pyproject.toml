@@ -19,6 +19,7 @@ classifiers = [ "Programming Language :: Python :: 3.8",
 python = "^3.8"
 loguru = "^0.5.3"
 bidict = "^0.21.4"
+# bubop = "^0.1.1"
 
 [tool.poetry.dev-dependencies]
 black = { version = "*", allow-prereleases = true }
@@ -26,6 +27,8 @@ isort = "*"
 mock = "*"
 pytest = "*"
 pdbpp = "^0.10.3"
+
+bubop = { path = "/home/berger/src/bubop", develop = true }
 
 [tool.isort]
 line_length = 95

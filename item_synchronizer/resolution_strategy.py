@@ -1,9 +1,14 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 from enum import Enum
-from typing import Callable, Optional
+from typing import Callable, final
 
 from item_synchronizer.types import DateGetterFn, Item
+
+
+def named(cls):
+    cls.name = cls.__name__
+    return cls
 
 
 class ResolutionResult:
@@ -54,6 +59,10 @@ class ResolutionStrategy(ABC):
         """
         raise NotImplementedError()
 
+    @classmethod
+    def name(cls):
+        pass
+
 
 class _RecencyRS(ResolutionStrategy):
     def __init__(
@@ -61,10 +70,14 @@ class _RecencyRS(ResolutionStrategy):
         date_getter_A: DateGetterFn,
         date_getter_B: DateGetterFn,
         compare_dates: Callable[[datetime, datetime], bool],
+        *args,
+        **kargs,
     ):
         self._date_getter_A = date_getter_A
         self._date_getter_B = date_getter_B
         self._compare_dates = compare_dates
+
+        super().__init__(*args, **kargs)
 
     def resolve(self, item_A: Item, item_B: Item) -> ResolutionResult:
         # handle None(s) ----------------------------------------------------------------------
@@ -82,37 +95,44 @@ class _RecencyRS(ResolutionStrategy):
             return ResolutionResult(id=ResolutionResult.ID.B, item=item_B)
 
 
+@named
 class MostRecentRS(_RecencyRS):
     def __init__(
         self,
         date_getter_A: DateGetterFn,
         date_getter_B: DateGetterFn,
     ):
-        super(MostRecentRS, self).__init__(
+        super().__init__(
             date_getter_A=date_getter_A,
             date_getter_B=date_getter_B,
             compare_dates=lambda date1, date2: date1 >= date2,
         )
 
 
+@named
 class LeastRecentRS(_RecencyRS):
     def __init__(
         self,
         date_getter_A: DateGetterFn,
         date_getter_B: DateGetterFn,
     ):
-        super(LeastRecentRS, self).__init__(
+        super().__init__(
             date_getter_A=date_getter_A,
             date_getter_B=date_getter_B,
             compare_dates=lambda date1, date2: date1 <= date2,
         )
 
 
+@named
 class AlwaysFirstRS(ResolutionStrategy):
     def resolve(self, item_A: Item, item_B: Item) -> ResolutionResult:
         return ResolutionResult(id=ResolutionResult.ID.A, item=item_A)
 
 
+@named
 class AlwaysSecondRS(ResolutionStrategy):
     def resolve(self, item_A: Item, item_B: Item) -> ResolutionResult:
         return ResolutionResult(id=ResolutionResult.ID.B, item=item_B)
+
+
+all_resolution_strategies = [AlwaysFirstRS, AlwaysSecondRS, MostRecentRS, LeastRecentRS]
