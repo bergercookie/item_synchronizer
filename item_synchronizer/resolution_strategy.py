@@ -1,12 +1,13 @@
+"""Home of the various resolution strategy classes."""
 from abc import ABC, abstractmethod
 from datetime import datetime
 from enum import Enum
-from typing import Callable, final
+from typing import Callable
 
 from item_synchronizer.types import DateGetterFn, Item
 
 
-def named(cls):
+def _named(cls):
     cls.name = cls.__name__
     return cls
 
@@ -18,29 +19,35 @@ class ResolutionResult:
     """
 
     class ID(Enum):
+        """Represents the ID of the item chosen from the corresponding resolution."""
+
         A = 0
         B = 1
         Mix = 2
 
-    def __init__(self, id: ID, item: Item):
+    def __init__(self, id: ID, item: Item):  # pylint: disable=W0622
         self._id = id
         self._item = item
 
     @property
     def result_id(self) -> ID:
+        """Get the result of the current resolution."""
         return self._id
 
     @property
     def item(self) -> Item:
+        """Get the item that was chosen by this resolution"""
         return self._item
 
 
 class ResolutionStrategy(ABC):
+    """Base class for all the resolution strategies."""
+
     def __init__(self, *args, **kargs):
         """
-        Implementations of this should accept whatever arguments they require for the resolve step that follows.
+        Implementations of this should accept whatever arguments they require for the resolve
+        step that follows.
         """
-        pass
 
     def can_resolve(self) -> bool:
         """
@@ -59,9 +66,11 @@ class ResolutionStrategy(ABC):
         """
         raise NotImplementedError()
 
+    @property
     @classmethod
-    def name(cls):
-        pass
+    def name(cls) -> str:
+        """Get the name of the derived resolution strategy."""
+        raise NotImplementedError
 
 
 class _RecencyRS(ResolutionStrategy):
@@ -73,6 +82,12 @@ class _RecencyRS(ResolutionStrategy):
         *args,
         **kargs,
     ):
+        """
+        Initialize the Resolution Strategy.
+
+        Provide at least the way of getting each one of the dates as well as the functions to
+        compare them.
+        """
         self._date_getter_A = date_getter_A
         self._date_getter_B = date_getter_B
         self._compare_dates = compare_dates
@@ -95,8 +110,10 @@ class _RecencyRS(ResolutionStrategy):
             return ResolutionResult(id=ResolutionResult.ID.B, item=item_B)
 
 
-@named
+@_named
 class MostRecentRS(_RecencyRS):
+    """Return the most recent item."""
+
     def __init__(
         self,
         date_getter_A: DateGetterFn,
@@ -109,8 +126,10 @@ class MostRecentRS(_RecencyRS):
         )
 
 
-@named
+@_named
 class LeastRecentRS(_RecencyRS):
+    """Return the oldest item."""
+
     def __init__(
         self,
         date_getter_A: DateGetterFn,
@@ -123,14 +142,18 @@ class LeastRecentRS(_RecencyRS):
         )
 
 
-@named
+@_named
 class AlwaysFirstRS(ResolutionStrategy):
+    """Return the first item."""
+
     def resolve(self, item_A: Item, item_B: Item) -> ResolutionResult:
         return ResolutionResult(id=ResolutionResult.ID.A, item=item_A)
 
 
-@named
+@_named
 class AlwaysSecondRS(ResolutionStrategy):
+    """Return the second item."""
+
     def resolve(self, item_A: Item, item_B: Item) -> ResolutionResult:
         return ResolutionResult(id=ResolutionResult.ID.B, item=item_B)
 

@@ -12,4 +12,3 @@ jobs:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         issue-message: 'Greetings to item_synchronizer and thanks for opening this issue'
         pr-message: 'Thanks for the contribution 🥳'
-

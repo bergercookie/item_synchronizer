@@ -1,12 +1,9 @@
-# The collections to synchronise should be the following
-# TODO
-
 from dataclasses import dataclass
 from functools import total_ordering
-from typing import List, MutableMapping, Tuple
+from typing import List, MutableMapping
 
 import pytest
-from bidict import bidict
+from bidict import MutableBidict, bidict  # type: ignore
 
 from item_synchronizer import Synchronizer
 from item_synchronizer.helpers import SideChanges
@@ -15,7 +12,7 @@ from item_synchronizer.resolution_strategy import (
     AlwaysSecondRS,
     ResolutionStrategy,
 )
-from item_synchronizer.types import ID, Item
+from item_synchronizer.types import ID
 
 
 @total_ordering
@@ -75,8 +72,8 @@ def create_synchronizer(
         return store_B[id_]
 
     # create correspondences
-    bidict_ = bidict()
-    all_ids = store_A.keys()  # type: ignore
+    bidict_: MutableBidict = bidict()
+
     # the A<->B mapping should still contain entries for deleted items
     for id_ in list(store_A.keys()) + list(store_B.keys()) + deleted_ids:
         bidict_[str(id_)] = str(id_)

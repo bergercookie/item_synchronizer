@@ -1,11 +1,11 @@
+"""Types used across this package."""
 from datetime import datetime
 from typing import Any, Callable
 
 # Type of the identifier of an item in each side.
 ID = str
 
-# Type of an item
-# TODO Make this into a generic argument
+# Type of an arbitrary item
 Item = Any
 
 # Insertion Function - when called with the contents of an item it should return

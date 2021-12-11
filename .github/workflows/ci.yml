@@ -23,7 +23,6 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         python-version: ["3.8", "3.9"]
-
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -35,19 +34,19 @@ jobs:
         run: poetry install
       - name: Run tests
         run: poetry run pytest --doctest-modules
-  style:
+  style_and_linters:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.8"
       - name: Python Poetry Action
         uses: abatilo/actions-poetry@v2.1.3
       - name: Install prerequisites
         run: poetry install
-      - name: Check style
-        run: poetry run ./scripts/check_style.py --check-only
+      - name: Run style checkers and linters
+        run: poetry run pre-commit run --all-files
   publish_package:
     runs-on: ubuntu-latest
     steps:

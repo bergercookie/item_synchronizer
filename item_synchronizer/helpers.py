@@ -1,7 +1,8 @@
+"""Helper functions and classes"""
 from dataclasses import dataclass, field
-from typing import List, Set
+from typing import MutableMapping, Set
 
-from item_synchronizer.types import ID, DeleterFn, InserterFn, ItemGetterFn
+from item_synchronizer.types import ID, DeleterFn, ItemGetterFn
 
 
 @dataclass
@@ -18,19 +19,21 @@ class SideChanges:
     deleted: Set[ID] = field(default_factory=set)
 
     def __str__(self) -> str:
-        s = f"New Items ({len(self.new)})\n\t"
+        s = f"New Items:      {len(self.new)}\n\t"
         s += "\n\t".join(id_ for id_ in self.new)
         s = s.rstrip("\n\t")
-        s += f"\nModified Items ({len(self.modified)})\n\t"
+        s += f"\nModified Items: {len(self.modified)}\n\t"
         s += "\n\t".join(id_ for id_ in self.modified)
         s = s.rstrip("\n\t")
-        s += f"\nDeleted Item ({len(self.deleted)})\n\t"
+        s += f"\nDeleted Item:   {len(self.deleted)}\n\t"
         s += "\n\t".join(id_ for id_ in self.deleted)
-        s = s.rstrip("\n\t")
+        s = s.rstrip("\t")
         return s
 
 
 def item_getter_handle_exc(item_getter: ItemGetterFn) -> ItemGetterFn:
+    """ItemGetter decorator function that handles exception when handing over the item."""
+
     def fn(*args, **kargs):
         try:
             return item_getter(*args, **kargs)
@@ -40,12 +43,13 @@ def item_getter_handle_exc(item_getter: ItemGetterFn) -> ItemGetterFn:
     return fn
 
 
-def delete_n_pop(deleter: DeleterFn, map_) -> DeleterFn:
+def delete_n_pop(deleter: DeleterFn, map_: MutableMapping) -> DeleterFn:
+    """Wrapper function for deleting and popping an item from the given map mapping."""
     delete_n_pop.__doc__ = deleter.__doc__
 
-    def fn(id):
-        deleter(id)
-        map_.pop(id)
+    def fn(id_):
+        deleter(id_)
+        map_.pop(id_)
 
     return fn
 

@@ -1,6 +1,7 @@
-from typing import Literal, Optional, Tuple
+"""House of the bi-directional Synchronizer class."""
+from typing import Any, Callable, Literal, Optional, Tuple, TypeVar, cast
 
-from bidict import bidict
+from bidict import MutableBidict  # type: ignore
 from loguru import logger
 
 from item_synchronizer.helpers import (
@@ -20,8 +21,10 @@ from item_synchronizer.types import (
     UpdaterFn,
 )
 
+_FuncT = TypeVar("_FuncT", bound=Callable[..., Any])
 
-class Synchronizer:
+
+class Synchronizer:  # pylint: disable="R0903,R0902"
     """
     Synchronize items from two different sources.
 
@@ -36,7 +39,7 @@ class Synchronizer:
     def __init__(
         self,
         *,
-        A_to_B: bidict,
+        A_to_B: MutableBidict,
         inserter_to_A: InserterFn,
         inserter_to_B: InserterFn,
         updater_to_A: UpdaterFn,
@@ -50,34 +53,37 @@ class Synchronizer:
         resolution_strategy: ResolutionStrategy,
         side_names: Tuple[str, str] = ("A Side", "B Side"),
     ):
-        self._A_to_B = A_to_B
-        self._B_to_A = A_to_B.inverse
-        self._inserter_to_A = self.catch_exc(inserter_to_A)
-        self._inserter_to_B = self.catch_exc(inserter_to_B)
-        self._updater_to_A = self.catch_exc(updater_to_A)
-        self._updater_to_B = self.catch_exc(updater_to_B)
-        self._deleter_to_A = self.catch_exc(delete_n_pop(deleter_to_A, self._A_to_B))
-        self._deleter_to_B = self.catch_exc(delete_n_pop(deleter_to_B, self._B_to_A))
-        self._converter_to_A = self.catch_exc(converter_to_A)
-        self._converter_to_B = self.catch_exc(converter_to_B)
+        self._A_to_B: MutableBidict = A_to_B
+        self._B_to_A: MutableBidict = A_to_B.inverse
+        self._inserter_to_A = self._catch_exc(inserter_to_A)
+        self._inserter_to_B = self._catch_exc(inserter_to_B)
+        self._updater_to_A = self._catch_exc(updater_to_A)
+        self._updater_to_B = self._catch_exc(updater_to_B)
+        self._deleter_to_A = self._catch_exc(delete_n_pop(deleter_to_A, self._A_to_B))
+        self._deleter_to_B = self._catch_exc(delete_n_pop(deleter_to_B, self._B_to_A))
+        self._converter_to_A = self._catch_exc(converter_to_A)
+        self._converter_to_B = self._catch_exc(converter_to_B)
         self._item_getter_A = item_getter_handle_exc(item_getter_A)
         self._item_getter_B = item_getter_handle_exc(item_getter_B)
         self._rs = resolution_strategy
         self._stats = tuple(TypeStats(name) for name in side_names)
 
-    def catch_exc(self, fn):
+    def _catch_exc(self, fn: _FuncT) -> _FuncT:
+        """Run the decorated function and catch all exceptions."""
+
         def wrapper(*args, **kargs):
             try:
                 return fn(*args, **kargs)
-            except:
+            except:  # pylint: disable="W0702"
                 if fn.__doc__ is not None:
                     desc = fn.__doc__.split("\n")[0].strip().rstrip(".")
                 else:
                     desc = str(fn)
                 logger.error(f"[{desc}] Operation failed.")
                 logger.opt(exception=True).debug(f"[{desc}] Operation failed.")
+                return None
 
-        return wrapper
+        return cast(_FuncT, wrapper)
 
     def _convert_n_insert(self, id_: ID, insert_to_side: Literal["A", "B"]) -> Optional[ID]:
         if insert_to_side == "A":
@@ -93,11 +99,11 @@ class Synchronizer:
 
         item = item_getter(id_)
         if item is None:
-            return
+            return None
         converted_item = converter(item)
         if converted_item is None:
-            return
-        new_id = inserter(converted_item)
+            return None
+        new_id: ID = inserter(converted_item)
 
         if insert_to_side == "A":
             self._stats[0].create_new()
@@ -125,28 +131,41 @@ class Synchronizer:
         self._stats[1].update()
 
     def sync(self, changes_A: SideChanges, changes_B: SideChanges):
+        """
+        Main method for running a full bi-directional sync given changes from the two sides
+        involved.
+
+        This is the main method you are supposed to call after the instance initialization to
+        actually synchronize the two sides.
+        """
         try:
             return self._sync(changes_A=changes_A, changes_B=changes_B)
         finally:
-            logger.warning(f"\n{self._stats[0]}\n{self._stats[1]}")
+            logger.warning(f"\n\n{self._stats[0]}\n{self._stats[1]}")
 
-    def _sync(self, changes_A: SideChanges, changes_B: SideChanges):
-        # new items ---------------------------------------------------------------------------
-        # Items that are new on either side should have no problem getting added to the other
-        # insert_to_side
-        def sync_new_items():
-            props = (
-                (self._A_to_B, changes_A.new, "B"),
-                (self._B_to_A, changes_B.new, "A"),
-            )
-            for (map_, new_changes, insert_to_side) in props:
-                for id_ in new_changes:
-                    inserted_id = self._convert_n_insert(id_, insert_to_side)
-                    if inserted_id is None:
-                        continue
-                    map_[id_] = inserted_id
+    def _sync_new_items(self, changes_A: SideChanges, changes_B: SideChanges):
+        """
+        Sync only the new items from each side.
 
-        sync_new_items()
+        Items that are new on either side should have no problem getting added to the other
+        insert_to_side.
+        """
+        props = (
+            (self._A_to_B, changes_A.new, "B"),
+            (self._B_to_A, changes_B.new, "A"),
+        )
+        for (map_, new_changes, insert_to_side) in props:
+            for id_ in new_changes:
+                insert_to_side = cast(Literal["A", "B"], insert_to_side)
+                inserted_id = self._convert_n_insert(id_, insert_to_side)
+                if inserted_id is None:
+                    continue
+                map_[id_] = inserted_id
+
+    def _sync(
+        self, changes_A: SideChanges, changes_B: SideChanges
+    ):  # pylint: disable="R0912,R0915,R0914"
+        self._sync_new_items(changes_A=changes_A, changes_B=changes_B)
 
         # items modified on both sides --------------------------------------------------------
         touched_from_B = changes_B.modified.union(changes_B.deleted)

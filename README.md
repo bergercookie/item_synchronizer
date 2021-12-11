@@ -4,6 +4,9 @@
 
 <a href="https://github.com/bergercookie/item_synchronizer/actions" alt="CI">
 <img src="https://github.com/bergercookie/item_synchronizer/actions/workflows/ci.yml/badge.svg"/></a>
+<a href="https://github.com/pre-commit/pre-commit">
+
+<img src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white" alt="pre-commit"></a>
 <a href="https://www.codacy.com/app/bergercookie/item_synchronizer">
 <img src="https://api.codacy.com/project/badge/Grade/9ddd71dc61914b32a0963d4101c29fb5"/></a>
 <a href="https://www.codacy.com/app/bergercookie/item_synchronizer">
@@ -15,7 +18,7 @@
 <a href="https://badge.fury.io/py/item-synchronizer">
 <img src="https://badge.fury.io/py/item-synchronizer.svg" alt="PyPI version" height="18"></a>
 <a href="https://pepy.tech/project/item-synchronizer">
-<!-- <img alt="Downloads" src="https://pepy.tech/badge/item-synchronizer"></a> -->
+<img alt="Downloads" src="https://pepy.tech/badge/item-synchronizer"></a>
 <a href="https://github.com/psf/black">
 <img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
