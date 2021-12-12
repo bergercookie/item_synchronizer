@@ -1,6 +1,6 @@
 # Item Synchronizer
 
-<img src="res/logo.png" alt="logo" style="zoom:50%;" />
+<img src="https://github.com/bergercookie/item_synchronizer/raw/master/res/logo.png" alt="logo" style="zoom:50%;" />
 
 <a href="https://github.com/bergercookie/item_synchronizer/actions" alt="CI">
 <img src="https://github.com/bergercookie/item_synchronizer/actions/workflows/ci.yml/badge.svg"/></a>
