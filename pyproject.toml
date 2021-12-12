@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "item_synchronizer"
-version = "1.1.1"
+version = "1.1.2"
 description = "Synchronize items bi-directionally between two different sources"
 authors = ["Nikos Koukis <nickkouk@gmail.com>"]
 license = "MIT"
@@ -9,11 +9,15 @@ homepage = "https://github.com/bergercookie/item_synchronizer"
 repository = "https://github.com/bergercookie/item_synchronizer"
 include = ["item_synchronizer/py.typed"]
 classifiers = [
+  "Framework :: Pytest",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Operating System :: Unix",
+  "Operating System :: Unix",
+  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
-  "License :: Other/Proprietary License",
-  "Operating System :: Unix",
+  "Topic :: Utilities",
 ]
 
 # end-user dependencies --------------------------------------------------------
@@ -21,7 +25,7 @@ classifiers = [
 python = "^3.8"
 loguru = "^0.5.3"
 bidict = "^0.21.4"
-bubop = "^0.1.1"
+bubop = "^0.1.4"
 
 # dev dependencies -------------------------------------------------------------
 [tool.poetry.dev-dependencies]
