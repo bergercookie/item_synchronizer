@@ -74,7 +74,10 @@ class Synchronizer:  # pylint: disable="R0903,R0902"
         def wrapper(*args, **kargs):
             try:
                 return fn(*args, **kargs)
-            except:  # pylint: disable="W0702"
+            except Exception as exc:  # pylint: disable="W0703"
+                if isinstance(exc, KeyboardInterrupt):
+                    raise
+
                 if fn.__doc__ is not None:
                     desc = fn.__doc__.split("\n")[0].strip().rstrip(".")
                 else:

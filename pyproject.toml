@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "item_synchronizer"
-version = "1.1.2"
+version = "1.1.3a"
 description = "Synchronize items bi-directionally between two different sources"
 authors = ["Nikos Koukis <nickkouk@gmail.com>"]
 license = "MIT"

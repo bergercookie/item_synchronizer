@@ -1,5 +1,9 @@
 """Init."""
 from .resolution_strategy import (
+    AlwaysFirstRS,
+    AlwaysSecondRS,
+    LeastRecentRS,
+    MostRecentRS,
     ResolutionResult,
     ResolutionStrategy,
     all_resolution_strategies,
@@ -7,6 +11,10 @@ from .resolution_strategy import (
 from .synchronizer import Synchronizer
 
 __all__ = [
+    "AlwaysFirstRS",
+    "AlwaysSecondRS",
+    "LeastRecentRS",
+    "MostRecentRS",
     "ResolutionResult",
     "ResolutionStrategy",
     "Synchronizer",
