@@ -7,10 +7,8 @@
 <a href="https://github.com/pre-commit/pre-commit">
 <img src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white" alt="pre-commit"></a>
 
-<a href="https://www.codacy.com/app/bergercookie/item_synchronizer">
-<img src="https://api.codacy.com/project/badge/Grade/9ddd71dc61914b32a0963d4101c29fb5"/></a>
-<a href="https://www.codacy.com/app/bergercookie/item_synchronizer">
-<img src="https://api.codacy.com/project/badge/Coverage/57206a822c41420bb5792b2cb70f06b5"/></a>
+<a href='https://coveralls.io/github/bergercookie/item_synchronizer'>
+<img src='https://coveralls.io/repos/github/bergercookie/item_synchronizer/badge.svg' alt='Coverage Status' /></a>
 <a href="https://github.com/bergercookie/item_synchronizer/blob/master/LICENSE.md" alt="LICENCE">
 <img src="https://img.shields.io/github/license/bergercookie/item_synchronizer.svg" /></a>
 <a href="https://pypi.org/project/item_synchronizer/" alt="pypi">
