@@ -25,6 +25,13 @@ repos:
         entry: mdl -r ~MD033,~MD013
   - repo: local
     hooks:
+      - id: check-github-workflows
+        name: Validate GitHub Workflows
+        description: 'Validate GitHub Workflows against the schema provided by SchemaStore'
+        entry: check-jsonschema --builtin-schema vendor.github-workflows
+        language: python
+        files: ^\.github/workflows/
+        types: [yaml]
       - id: black
         name: Black formatter
         description: "Black: The uncompromising Python code formatter"
