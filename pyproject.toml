@@ -28,7 +28,7 @@ bubop = { version = "^0.1.8*", allow-prereleases = true }
 
 # dev dependencies -------------------------------------------------------------
 [tool.poetry.dev-dependencies]
-black = { version = "21.11b1", allow-prereleases = true }
+black = { version = "22.3.0", allow-prereleases = true }
 identify = "^2.4.0"
 isort = "^5.10.1"
 mock = "*"

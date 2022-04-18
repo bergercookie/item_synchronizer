@@ -22,3 +22,5 @@ __all__ = [
     "Synchronizer",
     "all_resolution_strategies",
 ]
+
+__version__ = "1.1.3b"
