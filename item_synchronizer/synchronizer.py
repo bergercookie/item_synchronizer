@@ -2,7 +2,9 @@
 from typing import Any, Callable, Literal, Optional, Tuple, TypeVar, cast
 
 from bidict import MutableBidict  # type: ignore
-from loguru import logger
+
+# until you fix the linting issue with bubop - run pyright.
+from bubop import logger  # type: ignore
 
 from item_synchronizer.helpers import (
     SideChanges,
@@ -157,7 +159,7 @@ class Synchronizer:  # pylint: disable="R0903,R0902"
             (self._A_to_B, changes_A.new, "B"),
             (self._B_to_A, changes_B.new, "A"),
         )
-        for (map_, new_changes, insert_to_side) in props:
+        for map_, new_changes, insert_to_side in props:
             for id_ in new_changes:
                 insert_to_side = cast(Literal["A", "B"], insert_to_side)
                 inserted_id = self._convert_n_insert(id_, insert_to_side)

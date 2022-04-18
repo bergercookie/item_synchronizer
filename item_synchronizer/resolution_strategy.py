@@ -73,7 +73,12 @@ class ResolutionStrategy(ABC):
         raise NotImplementedError
 
 
-class _RecencyRS(ResolutionStrategy):
+class RecencyRS(ResolutionStrategy):
+    """Base class for the resolution strategies that act based on recency of the items.
+
+    You probably want to use one of the child classes instead of this one.
+    """
+
     def __init__(
         self,
         date_getter_A: DateGetterFn,
@@ -111,7 +116,7 @@ class _RecencyRS(ResolutionStrategy):
 
 
 @_named
-class MostRecentRS(_RecencyRS):
+class MostRecentRS(RecencyRS):
     """Return the most recent item."""
 
     def __init__(
@@ -127,7 +132,7 @@ class MostRecentRS(_RecencyRS):
 
 
 @_named
-class LeastRecentRS(_RecencyRS):
+class LeastRecentRS(RecencyRS):
     """Return the oldest item."""
 
     def __init__(

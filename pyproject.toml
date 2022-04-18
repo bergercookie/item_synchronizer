@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "item_synchronizer"
-version = "1.1.3a"
+version = "1.1.3b"
 description = "Synchronize items bi-directionally between two different sources"
 authors = ["Nikos Koukis <nickkouk@gmail.com>"]
 license = "MIT"
@@ -23,9 +23,8 @@ classifiers = [
 # end-user dependencies --------------------------------------------------------
 [tool.poetry.dependencies]
 python = "^3.8"
-loguru = "^0.5.3"
 bidict = "^0.21.4"
-bubop = "^0.1.4"
+bubop = { version = "^0.1.8*", allow-prereleases = true }
 
 # dev dependencies -------------------------------------------------------------
 [tool.poetry.dev-dependencies]
@@ -40,7 +39,7 @@ pyfakefs = "^4.5.3"
 pylint = "^2.12.2"
 pyright = "*"
 pytest = "*"
-types-PyYAML = "^6.0.1"
+types-PyYAML = "^5.4.1"
 types-python-dateutil = "^2.8.3"
 
 coveralls = "^3.3.1"
@@ -54,7 +53,7 @@ profile = "black"
 
 # black ------------------------------------------------------------------------
 [tool.black]
-experimental-string-processing = true
+preview = true
 line-length = 95
 target-version = ['py38', 'py39']
 include = '\.pyi?$'
@@ -105,6 +104,11 @@ reportMissingImports = true
 reportMissingTypeStubs = false
 pythonVersion = "3.8"
 pythonPlatform = "Linux"
+
+# pytest -----------------------------------------------------------------------
+[tool.pytest.ini_options]
+addopts = "--ignore=quickstart* --doctest-modules"
+
 
 # build-system -----------------------------------------------------------------
 [build-system]
