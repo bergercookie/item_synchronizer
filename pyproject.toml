@@ -24,7 +24,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.8"
 bidict = "^0.21.4"
-bubop = { version = "^0.1.8*", allow-prereleases = true }
+bubop = { version = ">=0.1.8 <0.2", allow-prereleases = true }
 
 # dev dependencies -------------------------------------------------------------
 [tool.poetry.dev-dependencies]
