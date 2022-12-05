@@ -23,4 +23,4 @@ __all__ = [
     "all_resolution_strategies",
 ]
 
-__version__ = "1.1.3"
+__version__ = "1.1.4"
