@@ -1,4 +1,5 @@
 """House of the bi-directional Synchronizer class."""
+
 from typing import Any, Callable, Literal, Optional, Tuple, TypeVar, cast
 
 from bidict import MutableBidict  # type: ignore
@@ -53,25 +54,30 @@ class Synchronizer:  # pylint: disable="R0903,R0902"
         item_getter_A: ItemGetterFn,
         item_getter_B: ItemGetterFn,
         resolution_strategy: ResolutionStrategy,
+        catch_exceptions: bool,
         side_names: Tuple[str, str] = ("A Side", "B Side"),
     ):
+        self._catch_exceptions = catch_exceptions
+
         self._A_to_B: MutableBidict = A_to_B
         self._B_to_A: MutableBidict = A_to_B.inverse
-        self._inserter_to_A = self._catch_exc(inserter_to_A)
-        self._inserter_to_B = self._catch_exc(inserter_to_B)
-        self._updater_to_A = self._catch_exc(updater_to_A)
-        self._updater_to_B = self._catch_exc(updater_to_B)
-        self._deleter_to_A = self._catch_exc(delete_n_pop(deleter_to_A, self._A_to_B))
-        self._deleter_to_B = self._catch_exc(delete_n_pop(deleter_to_B, self._B_to_A))
-        self._converter_to_A = self._catch_exc(converter_to_A)
-        self._converter_to_B = self._catch_exc(converter_to_B)
+        self._inserter_to_A = self._decide_catch_exc(inserter_to_A)
+        self._inserter_to_B = self._decide_catch_exc(inserter_to_B)
+        self._updater_to_A = self._decide_catch_exc(updater_to_A)
+        self._updater_to_B = self._decide_catch_exc(updater_to_B)
+        self._deleter_to_A = self._decide_catch_exc(delete_n_pop(deleter_to_A, self._A_to_B))
+        self._deleter_to_B = self._decide_catch_exc(delete_n_pop(deleter_to_B, self._B_to_A))
+        self._converter_to_A = self._decide_catch_exc(converter_to_A)
+        self._converter_to_B = self._decide_catch_exc(converter_to_B)
         self._item_getter_A = item_getter_handle_exc(item_getter_A)
         self._item_getter_B = item_getter_handle_exc(item_getter_B)
         self._rs = resolution_strategy
         self._stats = tuple(TypeStats(name) for name in side_names)
 
-    def _catch_exc(self, fn: _FuncT) -> _FuncT:
+    def _decide_catch_exc(self, fn: _FuncT) -> _FuncT:
         """Run the decorated function and catch all exceptions."""
+        if not self._catch_exceptions:
+            return fn
 
         def wrapper(*args, **kargs):
             try:
